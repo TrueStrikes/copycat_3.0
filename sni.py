@@ -10,17 +10,23 @@ import clipboard
 import pytesseract
 from PIL import Image
 
+# Initialize Pygame
 pygame.init()
 
+# Initialize colorama
 colorama.init()
 
-custom_ocr_config = r'--oem 3 --psm 6 -l eng'
+# Define custom Tesseract OCR configurations for better accuracy
+custom_ocr_config = r'--oem 3 --psm 6 -l eng'  # Example: Use English language
 
+# Set to keep track of retrieved message IDs and user messages
 retrieved_message_ids = set()
 user_messages = set()
 
+# Set to keep track of processed message IDs
 processed_message_ids = set()
 
+# Variable to indicate if the script is running
 running = True
 
 def display_message(channelid, message):
@@ -34,13 +40,15 @@ def display_message(channelid, message):
             print(content)
             print(colorama.Style.RESET_ALL)
 
+            # Check if the content starts with "# "
             if content.startswith("# "):
-                content = content[2:]
+                content = content[2:]  # Remove "# " from the beginning
 
-            copy_to_clipboard(content)
+            copy_to_clipboard(content)  # Copy the message content to the clipboard
             user_messages.add(content)
-            play_sound("t.mp3") 
+            play_sound("t.mp3")  # Play the sound "t.mp3"
 
+    # Process images in the message
     if author_id in target_user_ids:
         download_and_process_images(message)
 
@@ -49,7 +57,7 @@ def retrieve_latest_messages(channelid):
         'authorization': bot_token
     }
     params = {
-        'limit': 1
+        'limit': 1  # Update to retrieve the last 5 messages
     }
     r = requests.get(f'https://discord.com/api/v8/channels/{channelid}/messages', headers=headers, params=params)
     try:
@@ -68,21 +76,26 @@ def play_sound(sound_filename):
         pygame.mixer.init()
         pygame.mixer.music.load(sound_filename)
         pygame.mixer.music.play()
+        time.sleep(1)  # Give it some time to play the sound
     except Exception as e:
         print("Error playing sound:", e)
 
+# Copy the message content to the clipboard
 def copy_to_clipboard(content):
     clipboard.copy(content)
 
+# Clear the console and print "Watching" in bright yellow
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
     print(colorama.Fore.YELLOW + "Watching")
     print(colorama.Style.RESET_ALL)
 
+# Function to preprocess an image before OCR
 def preprocess_image(image):
-    # dw bout this
+    # Add any image preprocessing steps here (e.g., resizing, thresholding)
     return image
 
+# Function to extract text from an image using Tesseract OCR
 def extract_text_from_image(image_path):
     try:
         pytesseract.pytesseract.tesseract_cmd = tesseract_path  # Use the custom Tesseract path
@@ -100,6 +113,7 @@ def extract_text_from_image(image_path):
         print(f"Error extracting text from image: {e}")
         return ""
 
+# Function to download and process images in a message
 def download_and_process_images(message):
     attachments = message.get('attachments', [])
     for attachment in attachments:
@@ -108,14 +122,18 @@ def download_and_process_images(message):
             image_filename = os.path.basename(image_url)
             image_path = os.path.join('images', image_filename)
 
+            # Download the image
             download_image(image_url, image_path)
 
+            # Extract text from the image using Tesseract OCR
             extracted_text = extract_text_from_image(image_path)
 
+            # If text was extracted, copy it to the clipboard
             if extracted_text:
                 copy_to_clipboard(extracted_text)
                 print(f"Extracted text from image: {extracted_text}")
 
+# Function to download an image from a URL
 def download_image(image_url, image_path):
     try:
         response = requests.get(image_url)
@@ -125,13 +143,15 @@ def download_image(image_url, image_path):
     except Exception as e:
         print(f"Error downloading image: {e}")
 
+# Read the filename of the JSON file from config.json
 config_filename = "config.json"
 try:
     with open(config_filename, 'r') as config_file:
         config_data = json.load(config_file)
 except (FileNotFoundError, json.JSONDecodeError):
-    config_data = {}
+    config_data = {}  # If there's an error or the file doesn't exist, initialize an empty config dictionary
 
+# Load the settings from the specified file
 settings_filename = config_data.get("config_filename", "settings.json")
 tesseract_path = config_data.get("tesseract_path", "")
 try:
@@ -145,6 +165,7 @@ except (FileNotFoundError, json.JSONDecodeError):
     target_user_ids = []
     target_channels = []
 
+# Set the loop to run indefinitely
 while True:
     if running and bot_token and target_user_ids and target_channels:
         headers = {
@@ -159,4 +180,4 @@ while True:
                         display_message(channel_id, message)
                         processed_message_ids.add(message['id'])
 
-    time.sleep(0.05)
+    time.sleep(0.05)  # Add a wait time of 0.05 seconds before the next iteration
