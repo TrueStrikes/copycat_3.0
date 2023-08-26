@@ -1,0 +1,6 @@
+{
+    "bot_token": "",
+    "target_channels": ["977647037619249252"],
+    "target_user_ids": ["1143806889394708580"],
+    "auto_enter_mode": false
+}
