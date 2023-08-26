@@ -14,7 +14,7 @@ pygame.init()
 
 colorama.init()
 
-custom_ocr_config = r'--oem 3 --psm 6 -l eng'  # Example: Use English language
+custom_ocr_config = r'--oem 3 --psm 6 -l eng'
 
 retrieved_message_ids = set()
 user_messages = set()
@@ -68,7 +68,6 @@ def play_sound(sound_filename):
         pygame.mixer.init()
         pygame.mixer.music.load(sound_filename)
         pygame.mixer.music.play()
-        time.sleep(1)  # Give it some time to play the sound
     except Exception as e:
         print("Error playing sound:", e)
 
@@ -81,7 +80,7 @@ def clear_console():
     print(colorama.Style.RESET_ALL)
 
 def preprocess_image(image):
-    # Add any image preprocessing steps here (e.g., resizing, thresholding)
+    # dw bout this
     return image
 
 def extract_text_from_image(image_path):
@@ -131,7 +130,7 @@ try:
     with open(config_filename, 'r') as config_file:
         config_data = json.load(config_file)
 except (FileNotFoundError, json.JSONDecodeError):
-    config_data = {}  # If there's an error or the file doesn't exist, initialize an empty config dictionary
+    config_data = {}
 
 settings_filename = config_data.get("config_filename", "settings.json")
 tesseract_path = config_data.get("tesseract_path", "")
@@ -160,4 +159,4 @@ while True:
                         display_message(channel_id, message)
                         processed_message_ids.add(message['id'])
 
-    time.sleep(0.05)  # Add a wait time of 0.05 seconds before the next iteration
+    time.sleep(0.05)
