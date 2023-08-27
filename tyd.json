@@ -1,6 +1,6 @@
 {
-    "bot_token": "",
-    "target_channels": [""],
-    "target_user_ids": [""],
+    "bot_token": "placeholders",
+    "target_channels": ["1107046001061142681"],
+    "target_user_ids": ["1032781079955918948"],
     "auto_enter_mode": false
 }
