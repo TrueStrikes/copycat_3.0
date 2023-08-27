@@ -22,7 +22,7 @@ You should end up in a command line.
 
 **Do not just open cmd through your search bar as it will not work. I warned you**
 
-In the command line do `"pip install requests colorama clipboard pygame pytesseract pillow"` and wait for those to install.
+In the command line do `pip install requests colorama clipboard pygame pytesseract pillow` and wait for those to install.
 
 After you are done, open "config.json" and take the tesseract path you made earlier, and set it as that.
 
@@ -30,7 +30,7 @@ Now, open "tyd.json" and input a **user** token where it says "bot_token:".
 
 You do not know how to get your user token? Watch https://www.youtube.com/watch?v=YEgFvgg7ZPI . 
 
-At this point, in your command line you can do "python dum.py" and it would start watching the set channel.
+At this point, in your command line you can do `python dum.py` and it would start watching the set channel.
 
 Now, if you want to make sure that it works, go to your discord settings and turn on developer mode. You should then see that on right clicking a channel, you can copy the channel id. I trust you can tell what to do with that.
 
