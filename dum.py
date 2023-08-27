@@ -10,6 +10,8 @@ import clipboard
 import pytesseract
 from PIL import Image
 
+print(colorama.Fore.RED + "Sayeo Felix Armodon Vazes Layeo Glitchesa And Reverse wishes you good luck on sniping codes. Dw bout the pygame thing (It does not matter)" + colorama.Style.RESET_ALL)
+
 # Initialize Pygame
 pygame.init()
 
