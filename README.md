@@ -2,6 +2,10 @@
 
 First, head to https://discord.com/channels/1038575674899841044/1107046001061142681/1145075194818474074 and install tesseract.
 
+
+# BEFORE STARTING, CREATE A FOLDER CALLED IMAGES IN THE FOLDER WHERE DUM.PY IS LOCATED
+
+
 While installing note down the path it says it is being installed in, then finish.
 
 Once, done take that path and add "\tesseract.exe" to the end of it.
