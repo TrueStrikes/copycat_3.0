@@ -22,7 +22,7 @@ You should end up in a command line.
 
 **Do not just open cmd through your search bar as it will not work. I warned you**
 
-In the command line do "pip install requests colorama clipboard pygame pytesseract pillow" and wait for those to install.
+In the command line do ```"pip install requests colorama clipboard pygame pytesseract pillow"``` and wait for those to install.
 
 After you are done, open "config.json" and take the tesseract path you made earlier, and set it as that.
 
