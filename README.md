@@ -11,6 +11,7 @@ After that type "cmd" and enter
 ![image](https://github.com/TrueStrikes/xolo-members-only/assets/137821671/37507b9f-b435-4aae-8b61-e00549e7d36e)
 You should end up in a command line.
 **Do not just open cmd through your search bar as it will not work. I wanred you**
+
 In the command line do "pip install requests colorama clipboard pygame pytesseract pillow" and wait for those to install.
 After you are done, open "config.json" and take the tesseract path you made earlier, and set it as that.
 Now, open "tyd.json" and input a **user** token where it says "bot_token:". 
