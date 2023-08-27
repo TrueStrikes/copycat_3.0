@@ -47,4 +47,4 @@ Now, on click the 3 dots on a user's profile, you can copy their user ID. You ca
 If I missed anything, please inform me. My username is ReverseStrength
 
 
-**Everything looks fine but still not working? Test the bot on yourself.
+**Everything looks fine but still not working? Test the bot on yourself.**
