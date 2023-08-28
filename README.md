@@ -10,6 +10,8 @@ While installing note down the path it says it is being installed in, then finis
 
 Once, done take that path and add "\tesseract.exe" to the end of it.
 
+After that, run fixyourpath.py.
+
 Now, install the files above (dum.py and the others) and open that folder.
 
 After opening, right click the top and edit the address.
