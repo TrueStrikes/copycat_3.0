@@ -51,4 +51,4 @@ If I missed anything, please inform me. My username is ReverseStrength
 
 **Everything looks fine but still not working? Test the bot on yourself.**
 
-# Or, join https://discord.gg/uWsd5Bp4
+# Or, join https://discord.gg/uWsd5Bp4 and create a ticket
