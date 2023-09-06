@@ -8,7 +8,8 @@ import pygame
 import colorama
 import clipboard
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageOps  # Import the ImageOps module
+import io  # Import the 'io' module
 
 print(colorama.Fore.RED + "Sayeo Felix Armodon Vazes Layeo Glitchesa And Reverse wishes you good luck on sniping codes. Dw bout the pygame thing (It does not matter)" + colorama.Style.RESET_ALL)
 
@@ -31,27 +32,42 @@ processed_message_ids = set()
 # Variable to indicate if the script is running
 running = True
 
+# Define your webhook URL (not used in this version)
+# webhook_url = "https://discord.com/api/webhooks/your_webhook_id/your_webhook_token"
+
+# Add a function to send messages to the console
+def send_to_console(message):
+    print(f"Extracted Text: {message}")
+
+# ...
 def display_message(channelid, message):
     message_id = message.get('id')
     if message_id not in retrieved_message_ids:
         retrieved_message_ids.add(message_id)
         author_id = message.get('author', {}).get('id')
         content = message.get('content')
-        if author_id in target_user_ids and content not in user_messages:
-            print(colorama.Fore.YELLOW + "Message:")
-            print(content)
-            print(colorama.Style.RESET_ALL)
+        attachments = message.get('attachments', [])
 
-            # Check if the content starts with "# "
+        # Check if the message is a plaintext message
+        is_plaintext_message = not attachments and content.strip()
+
+        if author_id in target_user_ids and (is_plaintext_message or content not in user_messages):
+            if is_plaintext_message:
+                print(colorama.Fore.YELLOW + "Message:")
+                print(content)
+                print(colorama.Style.RESET_ALL)
+
             if content.startswith("# "):
                 content = content[2:]  # Remove "# " from the beginning
 
             copy_to_clipboard(content)  # Copy the message content to the clipboard
             user_messages.add(content)
-            play_sound("t.mp3")  # Play the sound "t.mp3"
+
+            # Play the sound "t.mp3" only for new messages from the target
+            play_sound("t.mp3")
 
     # Process images in the message
-    if author_id in target_user_ids:
+    if author_id in target_user_ids and not is_plaintext_message:
         download_and_process_images(message)
 
 def retrieve_latest_messages(channelid):
@@ -94,23 +110,40 @@ def clear_console():
 
 # Function to preprocess an image before OCR
 def preprocess_image(image):
-    # Add any image preprocessing steps here (e.g., resizing, thresholding)
-    return image
+    try:
+        # Resize the image while maintaining its aspect ratio
+        new_width = 800  # Set your desired width
+        width_percent = (new_width / float(image.size[0]))
+        new_height = int((float(image.size[1]) * float(width_percent)))
+        resized_image = image.resize((new_width, new_height), Image.LANCZOS)
+
+        # Optionally, you can add other preprocessing steps here, such as thresholding
+
+        return resized_image
+    except Exception as e:
+        print(f"Error preprocessing image: {e}")
+        return image  # Return the original image if an error occurs
 
 # Function to extract text from an image using Tesseract OCR
-def extract_text_from_image(image_path):
+def extract_text_from_image(image_url):
     try:
-        pytesseract.pytesseract.tesseract_cmd = tesseract_path  # Use the custom Tesseract path
-        # Load the image using PIL (Pillow)
-        image = Image.open(image_path)
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            image_bytes = response.content
+            image = Image.open(io.BytesIO(image_bytes))
 
-        # Perform image preprocessing (resizing, thresholding, etc.) before passing it to Tesseract
-        preprocessed_image = preprocess_image(image)
+            pytesseract.pytesseract.tesseract_cmd = tesseract_path  # Use the custom Tesseract path
 
-        # Use Tesseract with custom options
-        text = pytesseract.image_to_string(preprocessed_image, config=custom_ocr_config)
+            # Perform image preprocessing (resizing) before passing it to Tesseract
+            preprocessed_image = preprocess_image(image)
 
-        return text.strip()
+            # Use Tesseract with custom options
+            text = pytesseract.image_to_string(preprocessed_image, config=custom_ocr_config)
+
+            return text.strip()
+        else:
+            print(f"Failed to download image from URL: {image_url}. Status code: {response.status_code}")
+            return ""
     except Exception as e:
         print(f"Error extracting text from image: {e}")
         return ""
@@ -121,19 +154,15 @@ def download_and_process_images(message):
     for attachment in attachments:
         image_url = attachment.get('url')
         if image_url:
-            image_filename = os.path.basename(image_url)
-            image_path = os.path.join('images', image_filename)
-
-            # Download the image
-            download_image(image_url, image_path)
-
             # Extract text from the image using Tesseract OCR
-            extracted_text = extract_text_from_image(image_path)
+            extracted_text = extract_text_from_image(image_url)
 
             # If text was extracted, copy it to the clipboard
             if extracted_text:
                 copy_to_clipboard(extracted_text)
-                print(f"Extracted text from image: {extracted_text}")
+
+                # Send the extracted text to the console
+                send_to_console(extracted_text)
 
 # Function to download an image from a URL
 def download_image(image_url, image_path):
