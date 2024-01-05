@@ -46,7 +46,7 @@ Now, on click the 3 dots on a user's profile, you can copy their user ID. You ca
 
 ![image](https://github.com/TrueStrikes/xolo-members-only/assets/137821671/c5efc76d-7a19-4b53-8a8d-911302a047f7)
 
-If I missed anything, please inform me. My username is ReverseStrength
+If I missed anything, please inform me. My username is perfec
 
 
 **Everything looks fine but still not working? Test the bot on yourself.**
